@@ -1,0 +1,6 @@
+Revision history for Perl extension QGames.
+
+0.01  Wed Jan 26 08:21:26 2011
+	- original version; created by h2xs 1.23 with options
+		-A -n QGames
+

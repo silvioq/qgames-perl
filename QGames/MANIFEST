@@ -1,0 +1,8 @@
+Changes
+Makefile.PL
+MANIFEST
+ppport.h
+QGames.xs
+README
+t/QGames.t
+lib/QGames.pm
