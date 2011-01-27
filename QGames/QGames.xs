@@ -161,3 +161,29 @@ partida_posibles(par)
     OUTPUT:
         RETVAL
 
+int
+partida_mover(par, mov)
+        QGames_Partida par
+        SV*  mov
+    CODE:
+        STRLEN len;
+        char* ptrmov;
+        if( SvIOK( mov )) {
+            RETVAL = qg_partida_mover( par, SvIV( mov ) );
+            if( !RETVAL )
+                croak( "Error movimiento incorrecto %d", SvIV(mov) );
+        } else {
+            ptrmov = SvPV( mov, len );
+            if( ptrmov ){
+                RETVAL = qg_partida_mover_notacion( par, ptrmov );
+                if( !RETVAL )
+                    croak( "Error movimiento incorrecto %s", ptrmov );
+            } else {
+                croak( "Error movimiento incorrecto" );
+            }
+        }
+    OUTPUT:
+        RETVAL
+
+
+
