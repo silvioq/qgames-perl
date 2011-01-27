@@ -66,7 +66,7 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
             hv_store_str( hashtra, "transforma_pieza", movdat.transforma_pieza );
             hv_store_str( hashtra, "transforma_color", movdat.transforma_color );
             av_push( arrtra, newRV((SV*)hashtra) );
-            if( !qg_partida_movdata_nexttra( par, &movdat ) ) break;
+            if( !qg_partida_movdata_nexttran( par, &movdat ) ) break;
         }
         hv_store( hashmov, "transforma", 10, newRV( (SV*)arrtra ), 0 );
     }
@@ -81,7 +81,7 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
             hv_store_str( hashcre, "crea_color", movdat.crea_color );
             hv_store_str( hashcre, "crea_casillero", movdat.crea_casillero );
             av_push( arrcre, newRV((SV*)hashcre) );
-            if( !qg_partida_movdata_nextcre( par, &movdat ) ) break;
+            if( !qg_partida_movdata_nextcrea( par, &movdat ) ) break;
         }
         hv_store( hashmov, "crea", 4, newRV( (SV*)arrcre ), 0 );
     }
@@ -215,5 +215,13 @@ partida_tablero(par)
             hv_store_str( hashpie, "color", color );
             av_push( RETVAL, newRV((SV*)hashpie) );
         }
+    OUTPUT:
+        RETVAL
+
+const char*
+partida_color(par)
+        QGames_Partida par
+    CODE:
+        RETVAL = qg_partida_color( par );
     OUTPUT:
         RETVAL

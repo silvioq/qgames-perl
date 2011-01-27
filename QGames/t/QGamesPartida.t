@@ -1,5 +1,5 @@
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 BEGIN { use_ok('QGames') };
 
 my $tipojuego = QGames::open( "Ajedrez" );
@@ -11,4 +11,6 @@ $partida   = $tipojuego->crea_partida();
 isa_ok( $partida, QGames::Partida, "partida" );
 ok( $partida->id() );
 ok( $partida->id() ne $oldid );
+
+ok( $partida->color() eq "blanco" )
 
