@@ -225,3 +225,13 @@ partida_color(par)
         RETVAL = qg_partida_color( par );
     OUTPUT:
         RETVAL
+
+
+int
+partida_movidas_count(par)
+        QGames_Partida par
+    CODE:
+        RETVAL = qg_partida_movhist_count( par );
+    OUTPUT:
+        RETVAL
+
