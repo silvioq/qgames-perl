@@ -186,4 +186,34 @@ partida_mover(par, mov)
         RETVAL
 
 
-
+AV*
+partida_tablero(par)
+        QGames_Partida par
+    CODE:
+        RETVAL = newAV();
+        sv_2mortal((SV*)RETVAL);
+        int pie = qg_partida_tablero_count( par, LAST_MOVE );
+        int cap = qg_partida_tablero_countcap( par, LAST_MOVE );
+        int i;
+        for( i = 0; i < pie; i ++ ){
+            char* casillero; char* tipo; char* color;
+            qg_partida_tablero_data( par, LAST_MOVE, i, &casillero, &tipo, &color );
+            HV* hashpie = newHV();
+            sv_2mortal( (SV*)hashpie );
+            hv_store_str( hashpie, "pieza", tipo );
+            hv_store_str( hashpie, "casillero", casillero );
+            hv_store_str( hashpie, "color", color );
+            av_push( RETVAL, newRV((SV*)hashpie) );
+        }
+        for( i = 0; i < cap; i ++ ){
+            char* tipo; char* color;
+            qg_partida_tablero_datacap( par, LAST_MOVE, i, &tipo, &color );
+            HV* hashpie = newHV();
+            sv_2mortal( (SV*)hashpie );
+            hv_store_str( hashpie, "pieza", tipo );
+            hv_store_str( hashpie, "casillero", ":captured" );
+            hv_store_str( hashpie, "color", color );
+            av_push( RETVAL, newRV((SV*)hashpie) );
+        }
+    OUTPUT:
+        RETVAL
