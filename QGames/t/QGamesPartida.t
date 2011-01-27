@@ -1,5 +1,5 @@
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 BEGIN { use_ok('QGames') };
 
 my $tipojuego = QGames::open( "Ajedrez" );
@@ -15,5 +15,6 @@ ok( $partida->id() ne $oldid );
 ok( $partida->color() eq "blanco" );
 ok( $partida->movidas_count() eq 0 );
 ok( $partida->mover( "e4" ) );
-ok( $partida->movidas_count() eq 1 );
+ok( $partida->movidas_count eq 1 );
 
+ok( $partida->estado eq "Jugando" );

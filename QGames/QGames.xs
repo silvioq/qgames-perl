@@ -235,3 +235,12 @@ partida_movidas_count(par)
     OUTPUT:
         RETVAL
 
+char*
+partida_estado(par)
+        QGames_Partida par
+    CODE:
+        char* res;
+        qg_partida_final( par, &res );
+        RETVAL = res ? res : "Jugando";
+    OUTPUT:
+        RETVAL
