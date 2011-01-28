@@ -2,7 +2,7 @@
 use Test::More tests => 11;
 BEGIN { use_ok('QGames') };
 my $tipojuego = QGames::open( "Ajedrez" );
-my $partida   = $tipojuego->crea_partida();
+my $partida   = $tipojuego->crea();
 my $id        = $partida->id();
 foreach( qw{ e4 e5 Nc3 Nc6 f4 exf4 } ){
     ok( $partida->mover( $_ ), "Moviendo $_" );

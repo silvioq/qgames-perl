@@ -3,7 +3,7 @@ use Test::More tests => 15;
 BEGIN { use_ok('QGames') };
 
 my $tipojuego = QGames::open( "Ajedrez" );
-my $partida   = $tipojuego->crea_partida();
+my $partida   = $tipojuego->crea();
 
 ok( $partida->color() eq "blanco" );
 ok( $partida->movidas_count() eq 0 );

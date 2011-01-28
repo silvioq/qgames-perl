@@ -4,10 +4,10 @@ BEGIN { use_ok('QGames') };
 
 my $tipojuego = QGames::open( "Ajedrez" );
 isa_ok( $tipojuego , QGames::Tipojuego );
-my $partida   = $tipojuego->crea_partida();
+my $partida   = $tipojuego->crea();
 my $oldid     = $partida->id();
 isa_ok( $partida, QGames::Partida, "partida" );
-$partida   = $tipojuego->crea_partida();
+$partida   = $tipojuego->crea();
 isa_ok( $partida, QGames::Partida, "partida" );
 ok( $partida->id() );
 ok( $partida->id() ne $oldid );

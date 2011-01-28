@@ -119,7 +119,7 @@ open(juego)
 MODULE = QGames		PACKAGE = QGames::Tipojuego  PREFIX = tjuego_
 
 QGames_Partida
-tjuego_crea_partida(tj,id=NULL)
+tjuego_crea(tj,id=NULL)
         QGames_Tipojuego tj
         char* id
     CODE:
