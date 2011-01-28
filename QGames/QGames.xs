@@ -168,6 +168,22 @@ tjuego_describe(tj)
             }
             hv_store( RETVAL, "piezas", 6, newRV((SV*)arrpie), 0 );
         }
+        {
+            HV* hashcas = newHV();
+            int i = 1; const char* cas; int* pos;
+            int dims = qg_tipojuego_get_dims( tj );
+            while( cas = qg_tipojuego_info_casillero( tj, i, &pos ) ){
+                AV* coord   = newAV();
+                int j;
+                for( j = 0; j < dims; j ++ ){
+                    av_push( coord, newSViv( pos[j] ) );
+                }
+                hv_store( hashcas, cas, strlen(cas), newRV((SV*)coord), 0 );
+                i ++;
+            }
+            hv_store( RETVAL, "casilleros", 10, newRV((SV*)hashcas), 0 );
+            hv_store( RETVAL, "dims", 4, newSViv( dims ), 0 );
+        }
     OUTPUT:
         RETVAL
 

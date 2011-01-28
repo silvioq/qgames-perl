@@ -1,5 +1,5 @@
 
-use Test::More tests => 21;
+use Test::More tests => 23;
 BEGIN { use_ok('QGames') };
 
 ok( my $tipojuego = QGames::open( "Ajedrez" ) );
@@ -13,6 +13,7 @@ foreach( qw{ alfil caballo dama peon rey torre } ){
     ok( $piezas[$i] eq $_, "Pieza $i es $_" );   
     $i ++;
 }
+ok(  keys( %{$tipojuego->describe->{casilleros}} ) eq  64 ,     "64 casilleros" );
 
 ok(  $tipojuego = QGames::open( "AfricaUniversity" ) );
 ok(  $tipojuego->describe->{colores}->[0]->{nombre} eq "rojo"  , "Es rojo" );
@@ -33,3 +34,4 @@ foreach( qw{ gema } ){
     ok( $piezas[$i] eq $_, "Pieza $i es $_" );   
     $i ++;
 }
+ok(  keys( %{$tipojuego->describe->{casilleros}} ) eq  169 ,    13 * 13 . " casilleros" );
