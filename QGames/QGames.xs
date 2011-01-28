@@ -127,6 +127,20 @@ tjuego_crea_partida(tj,id=NULL)
     OUTPUT:
         RETVAL
 
+QGames_Partida
+tjuego_load(tj, bin)
+        QGames_Tipojuego tj
+        SV* bin
+    CODE:
+        STRLEN len;
+        char* dat;
+        dat = SvPV( bin, len );
+        RETVAL = qg_partida_load( tj, (void*)dat, len );
+    OUTPUT:
+        RETVAL
+
+
+
 MODULE = QGames		PACKAGE = QGames::Partida  PREFIX = partida_
 
 void
@@ -261,5 +275,17 @@ partida_estado(par)
         RETVAL
 
 
-
+SV*
+partida_dump(par)
+        QGames_Partida par
+    CODE:
+        void* dat; int len;
+        if( !qg_partida_dump( par, &dat, &len ) ){
+            croak( "Error en dump de partida" );
+            RETVAL = newSViv( 0 );
+        } else {
+            RETVAL = newSVpv( (char*) dat, len );
+        };
+    OUTPUT:
+        RETVAL
 
