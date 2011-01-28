@@ -154,12 +154,27 @@ partida_posibles(par)
         RETVAL = newAV();
         sv_2mortal((SV*)RETVAL);
         while( qg_partida_movidas_data( par, movnum, &movdat ) ){
-
             av_push( RETVAL, newRV( (SV*)generate_hash_movida(par, movdat) ) );
             movnum ++;
         }
     OUTPUT:
         RETVAL
+
+AV*
+partida_historial(par)
+        QGames_Partida par
+    CODE:
+        int movnum = 0;
+        Movdata movdat;
+        RETVAL = newAV();
+        sv_2mortal((SV*)RETVAL);
+        while( qg_partida_movhist_data( par, movnum, &movdat ) ){
+            av_push( RETVAL, newRV( (SV*)generate_hash_movida(par, movdat) ) );
+            movnum ++;
+        }
+    OUTPUT:
+        RETVAL
+
 
 int
 partida_mover(par, mov)
@@ -244,3 +259,7 @@ partida_estado(par)
         RETVAL = res ? res : "Jugando";
     OUTPUT:
         RETVAL
+
+
+
+
