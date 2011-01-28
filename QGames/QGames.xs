@@ -139,6 +139,28 @@ tjuego_load(tj, bin)
     OUTPUT:
         RETVAL
 
+HV*
+tjuego_describe(tj)
+        QGames_Tipojuego tj
+    CODE:
+        RETVAL = newHV();
+        sv_2mortal((SV*)RETVAL);
+        {
+            AV* arrcol = newAV();
+            int i = 1; const char* color ;
+            while( color = qg_tipojuego_info_color( tj, i ) ){
+                HV* hashcol = newHV();
+                hv_store_str( hashcol, "nombre", color );
+                if( qg_tipojuego_info_color_rotado( tj, i ) ) {
+                    hv_store( hashcol, "rotado", 6, newSViv( 1 ), 0 );
+                }
+                av_push( arrcol, newRV( (SV*)hashcol ) );
+                i ++;
+            }
+            hv_store( RETVAL, "colores", 7, newRV((SV*)arrcol), 0 );
+        }
+    OUTPUT:
+        RETVAL
 
 
 MODULE = QGames		PACKAGE = QGames::Partida  PREFIX = partida_
