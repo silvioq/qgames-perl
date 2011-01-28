@@ -159,6 +159,15 @@ tjuego_describe(tj)
             }
             hv_store( RETVAL, "colores", 7, newRV((SV*)arrcol), 0 );
         }
+        {
+            AV* arrpie = newAV();
+            int i = 1; const char* tpieza;
+            while( tpieza = qg_tipojuego_info_tpieza( tj, i ) ){
+                av_push( arrpie, newSVpv( tpieza, strlen( tpieza ) ) );
+                i ++;
+            }
+            hv_store( RETVAL, "piezas", 6, newRV((SV*)arrpie), 0 );
+        }
     OUTPUT:
         RETVAL
 
