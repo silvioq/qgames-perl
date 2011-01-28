@@ -1,12 +1,12 @@
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 BEGIN { use_ok('QGames') };
 
 ok( my $tipojuego = QGames::open( "Ajedrez" ) );
-ok(  $tipojuego->describe->{colores}->[0]->{nombre} eq "blanco", "Es blanco" );
-ok( !$tipojuego->describe->{colores}->[0]->{rotado}            , "Blanco no rota" );
-ok(  $tipojuego->describe->{colores}->[1]->{nombre} eq "negro" , "Es negro" );
-ok(  $tipojuego->describe->{colores}->[1]->{rotado}            , "Negro rota" );
+ok(  $tipojuego->describe->{colores}->{blanco}                 , "Esta el blanco" );
+ok( !$tipojuego->describe->{colores}->{blanco}->{rotado}       , "Blanco no rota" );
+ok(  $tipojuego->describe->{colores}->{negro}                  , "Esta el negro" );
+ok(  $tipojuego->describe->{colores}->{negro}->{rotado}        , "negro si rota" );
 my @piezas = sort @{$tipojuego->describe->{piezas}};
 my $i = 0;
 foreach( qw{ alfil caballo dama peon rey torre } ){
@@ -16,10 +16,11 @@ foreach( qw{ alfil caballo dama peon rey torre } ){
 ok(  keys( %{$tipojuego->describe->{casilleros}} ) eq  64 ,     "64 casilleros" );
 
 ok(  $tipojuego = QGames::open( "AfricaUniversity" ) );
-ok(  $tipojuego->describe->{colores}->[0]->{nombre} eq "rojo"  , "Es rojo" );
-ok( !$tipojuego->describe->{colores}->[0]->{rotado}            , "Blanco no rota" );
-ok(  $tipojuego->describe->{colores}->[1]->{nombre} eq "negro" , "Es negro" );
-ok( !$tipojuego->describe->{colores}->[1]->{rotado}            , "Negro no rota" );
+ok( !$tipojuego->describe->{colores}->{blanco}                 , "No esta el blanco" );
+ok(  $tipojuego->describe->{colores}->{rojo}                   , "Esta rojo" );
+ok( !$tipojuego->describe->{colores}->{rojo}->{rotado}         , "rojo no rota" );
+ok(  $tipojuego->describe->{colores}->{negro}                  , "Esta negro" );
+ok( !$tipojuego->describe->{colores}->{negro}->{rotado}        , "negro no rota" );
 @piezas = sort @{$tipojuego->describe->{piezas}};
 $i = 0;
 foreach( qw{ A U } ){

@@ -146,18 +146,19 @@ tjuego_describe(tj)
         RETVAL = newHV();
         sv_2mortal((SV*)RETVAL);
         {
-            AV* arrcol = newAV();
+            HV* hashcol = newHV();
             int i = 1; const char* color ;
             while( color = qg_tipojuego_info_color( tj, i ) ){
-                HV* hashcol = newHV();
-                hv_store_str( hashcol, "nombre", color );
+                HV* hashrot = newHV();
                 if( qg_tipojuego_info_color_rotado( tj, i ) ) {
-                    hv_store( hashcol, "rotado", 6, newSViv( 1 ), 0 );
+                    hv_store( hashrot, "rotado", 6, newSViv( 1 ), 0 );
+                } else {
+                    hv_store( hashrot, "rotado", 6, newSViv( 0 ), 0 );
                 }
-                av_push( arrcol, newRV( (SV*)hashcol ) );
+                hv_store( hashcol, color, strlen(color), newRV( (SV*)hashrot ), 0 );
                 i ++;
             }
-            hv_store( RETVAL, "colores", 7, newRV((SV*)arrcol), 0 );
+            hv_store( RETVAL, "colores", 7, newRV((SV*)hashcol), 0 );
         }
         {
             AV* arrpie = newAV();
