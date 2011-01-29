@@ -43,15 +43,28 @@ QGames - Perl extension for QGames engine
 =head1 SYNOPSIS
 
   use QGames;
-  blah blah blah
+  my $gametype = QGames::open( "Ajedrez" );
+  my $game = $gametype->crea();
+
+  foreach my $possible_move( @{$game->posibles} ){
+      print  "Move number: " . $possible_move->{numero} . " Notation: " . $possible_move->{notacion} . "\n";
+  }
+
+  $game->mover( "e4" );
+  foreach my $board( @{$game->tablero} ){
+      print  "Piece: " . $board->{pieza} . "  Square: " . $board->{casillero} . " Owner: " . $board->{color} . "\n";
+  }
 
 =head1 DESCRIPTION
 
-Stub documentation for QGames, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+This extension wraps QGames Engine functions. Two class are exported:
+QGames::Tipojuego and QGames::Partida
 
-Blah blah blah.
+QGames::Tipojuego exports functions to create game and describe game
+features.
+
+QGames::Partida is usefull for manage games, exporting possible moves,
+board status, history moves and move actions.
 
 =head2 EXPORT
 
@@ -61,14 +74,7 @@ None by default.
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
+L<http://github.com/silvioq/qgames>, L<http://github.com/silvioq/qgames-perl>
 
 =head1 AUTHOR
 
