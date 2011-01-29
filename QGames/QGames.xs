@@ -188,6 +188,80 @@ tjuego_describe(tj)
     OUTPUT:
         RETVAL
 
+HV*
+tjuego_img(tj, ...)
+        QGames_Tipojuego tj
+    CODE:
+        // tablero
+        STRLEN  len;
+        if( items == 1 || ( items == 2 && strcmp( "tablero", (char*)SvPV(ST(1), len ) ) == 0 ) ){
+            RETVAL = newHV();
+            sv_2mortal((SV*)RETVAL);
+            // Tablero
+            int w, h;
+            void* png;
+            int size;
+            if( size = qg_tipojuego_get_tablero_png( tj, BOARD_ACTUAL, 0, &png, &w, &h ) ){
+                hv_store( RETVAL, "png", 3, newSVpv( png, size ), 0 );
+                hv_store( RETVAL, "w", 1, newSViv( w ), 0 );
+                hv_store( RETVAL, "h", 1, newSViv( h ), 0 );
+            }
+        } else if( items == 2 && strcmp( "rotado", (char*)SvPV(ST(1), len ) ) == 0 ){
+            RETVAL = newHV();
+            sv_2mortal((SV*)RETVAL);
+            // Tablero
+            int w, h;
+            void* png;
+            int size;
+            if( size = qg_tipojuego_get_tablero_png( tj, BOARD_ACTUAL, GETPNG_ROTADO, &png, &w, &h ) ){
+                hv_store( RETVAL, "png", 3, newSVpv( png, size ), 0 );
+                hv_store( RETVAL, "w", 1, newSViv( w ), 0 );
+                hv_store( RETVAL, "h", 1, newSViv( h ), 0 );
+            }
+        } else if( items == 3 || items == 4 ){
+            char* color = NULL; char* tpieza = NULL;
+            char* arg =  (char*)SvPV(ST(1), len );
+            if( qg_tipojuego_get_color( tj, arg ) != NOT_FOUND ){
+                color = arg;
+            } else if( qg_tipojuego_get_tipopieza( tj, arg ) != NOT_FOUND ){
+                tpieza = arg;
+            } else {
+                croak( "arg 2/%d: Debe ser pieza o color (%s)", items, arg );
+            }
+
+            arg =  (char*)SvPV(ST(2), len );
+            if( qg_tipojuego_get_color( tj, arg ) != NOT_FOUND ){
+                color = arg;
+            } else if( qg_tipojuego_get_tipopieza( tj, arg ) != NOT_FOUND ){
+                tpieza = arg;
+            } else {
+                croak( "arg 3/%d: Debe ser pieza o color (%s)", items, arg );
+            }
+            if( !tpieza || !color ){
+                croak( "Mal definidos los parametros" );
+                RETVAL = (HV*) &PL_sv_undef;
+            } else {
+                RETVAL = newHV();
+                sv_2mortal((SV*)RETVAL);
+                // Tablero
+                int w, h;
+                void* png;
+                int size;
+                int flags = ( items == 4 && strncmp( "cap", (char*)SvPV(ST(3), len ), 3 ) == 0 ? 
+                              GETPNG_PIEZA_CAPTURADA : 0 );
+                if( size = qg_tipojuego_get_tpieza_png( tj, color, tpieza, flags, &png, &w, &h ) ){
+                    hv_store( RETVAL, "png", 3, newSVpv( png, size ), 0 );
+                    hv_store( RETVAL, "w", 1, newSViv( w ), 0 );
+                    hv_store( RETVAL, "h", 1, newSViv( h ), 0 );
+                }
+            }
+        } else {
+            RETVAL = (HV*) &PL_sv_undef;
+        }
+    OUTPUT:
+        RETVAL
+        
+
 
 MODULE = QGames		PACKAGE = QGames::Partida  PREFIX = partida_
 
