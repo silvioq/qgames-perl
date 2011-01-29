@@ -5,4 +5,9 @@ ppport.h
 QGames.xs
 README
 t/QGames.t
+t/QGamesDump.t  
+t/QGamesImg.t  
+t/QGamesMateDelLoco.t  
+t/QGamesPartida.t  
+t/QGamesTipojuego.t
 lib/QGames.pm
