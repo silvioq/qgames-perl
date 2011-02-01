@@ -111,7 +111,21 @@ QGames_Tipojuego
 open(juego)
         char* juego
     CODE:
-        RETVAL = qg_tipojuego_open( juego );
+        static  HV*  hv_listgames = NULL;
+        int  len = strlen( juego );
+        RETVAL = NULL;
+        if( hv_listgames ){
+            SV** game = hv_fetch( hv_listgames, juego, len, 0 );
+            if( game ){
+                RETVAL = (Tipojuego*)(*game);
+            }
+        } else {
+            hv_listgames = newHV();
+        }
+        if( !RETVAL ){
+            RETVAL = qg_tipojuego_open( juego );
+            hv_store( hv_listgames, juego, len, (SV*)RETVAL, 0 );
+        }
     OUTPUT:
         RETVAL
 

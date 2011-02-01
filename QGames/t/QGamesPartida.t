@@ -1,13 +1,14 @@
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 BEGIN { use_ok('QGames') };
 
 my $tipojuego = QGames::open( "Ajedrez" );
 isa_ok( $tipojuego , QGames::Tipojuego );
+isa_ok( QGames::open( "Ajedrez" ), QGames::Tipojuego );
 my $partida   = $tipojuego->crea();
 my $oldid     = $partida->id();
 isa_ok( $partida, QGames::Partida, "partida" );
-$partida   = $tipojuego->crea();
+$partida   = QGames::open( "Ajedrez" )->crea();
 isa_ok( $partida, QGames::Partida, "partida" );
 ok( $partida->id() );
 ok( $partida->id() ne $oldid );
