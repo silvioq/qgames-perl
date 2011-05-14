@@ -199,6 +199,10 @@ tjuego_describe(tj)
             hv_store( RETVAL, "casilleros", 10, newRV((SV*)hashcas), 0 );
             hv_store( RETVAL, "dims", 4, newSViv( dims ), 0 );
         }
+        { 
+            const char* nombre = qg_tipojuego_get_nombre( tj );
+            hv_store( RETVAL, "nombre", 6, newSVpv( nombre, strlen( nombre ) ), 0 );
+        }
     OUTPUT:
         RETVAL
 

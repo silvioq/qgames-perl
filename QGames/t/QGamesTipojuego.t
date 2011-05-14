@@ -1,5 +1,5 @@
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 BEGIN { use_ok('QGames') };
 
 ok( my $tipojuego = QGames::open( "Ajedrez" ) );
@@ -7,6 +7,7 @@ ok(  $tipojuego->describe->{colores}->{blanco}                 , "Esta el blanco
 ok( !$tipojuego->describe->{colores}->{blanco}->{rotado}       , "Blanco no rota" );
 ok(  $tipojuego->describe->{colores}->{negro}                  , "Esta el negro" );
 ok(  $tipojuego->describe->{colores}->{negro}->{rotado}        , "negro si rota" );
+ok(  $tipojuego->describe->{nombre} eq "Ajedrez"               , "El nombre es Ajedrez" );
 my @piezas = sort @{$tipojuego->describe->{piezas}};
 my $i = 0;
 foreach( qw{ alfil caballo dama peon rey torre } ){
