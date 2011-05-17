@@ -55,6 +55,8 @@ QGames - Perl extension for QGames engine
       print  "Piece: " . $board->{pieza} . "  Square: " . $board->{casillero} . " Owner: " . $board->{color} . "\n";
   }
 
+  print $game->color; # Prints negro
+
 =head1 DESCRIPTION
 
 This extension wraps QGames Engine functions. Two class are exported:
