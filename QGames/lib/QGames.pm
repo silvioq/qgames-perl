@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require XSLoader;
 XSLoader::load('QGames', $VERSION);
@@ -56,6 +56,12 @@ QGames - Perl extension for QGames engine
   }
 
   print $game->color; # Prints negro
+
+  # Returns QGames::FINAL_ENJUEGO, QGames::FINAL_EMPATE or color number
+  print $game->final . "\n";
+
+  # Returns winner color
+  print $game->ganador . "\n";
 
 =head1 DESCRIPTION
 

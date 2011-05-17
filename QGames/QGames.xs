@@ -93,6 +93,17 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
 
 MODULE = QGames		PACKAGE = QGames		
 
+BOOT:
+  {
+      HV *stash;
+      stash = gv_stashpv("QGames", TRUE);
+      newCONSTSUB(stash, "FINAL_ENJUEGO", newSViv(FINAL_ENJUEGO));
+      newCONSTSUB(stash, "FINAL_EMPATE", newSViv(FINAL_EMPATE));
+  }
+
+
+
+
 void
 set_path(path)
         char* path
@@ -413,6 +424,31 @@ partida_estado(par)
         RETVAL = res ? res : "Jugando";
     OUTPUT:
         RETVAL
+
+int 
+partida_final(par)
+        QGames_Partida par
+    CODE:
+        RETVAL = qg_partida_final( par, NULL );
+    OUTPUT:
+        RETVAL
+
+const char*
+partida_ganador(par)
+        QGames_Partida par
+    CODE:
+        int ret = qg_partida_final( par, NULL );
+        switch(ret){
+            case FINAL_ENJUEGO:
+            case FINAL_EMPATE:
+                RETVAL = NULL;
+                break;
+            default:
+                RETVAL = qg_partida_color( par );
+        }
+    OUTPUT:
+        RETVAL
+      
 
 
 SV*
