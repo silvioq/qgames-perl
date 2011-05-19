@@ -291,6 +291,27 @@ tjuego_img(tj, ...)
         RETVAL
         
 
+HV*
+tjuego_logo(tj)
+        QGames_Tipojuego tj
+    CODE:
+        void*  png; int w, h, size;
+        if( size = qg_tipojuego_get_logo( tj, &png, &w, &h ) ){
+            RETVAL = newHV();
+            sv_2mortal((SV*)RETVAL);
+            hv_store( RETVAL, "png", 3, newSVpv( png, size ), 0 );
+            hv_store( RETVAL, "w", 1, newSViv( w ), 0 );
+            hv_store( RETVAL, "h", 1, newSViv( h ), 0 );
+            qgames_free_png( png );
+        } else {
+            RETVAL = (HV*) &PL_sv_undef;
+        }
+    OUTPUT:
+        RETVAL
+
+
+
+
 
 MODULE = QGames		PACKAGE = QGames::Partida  PREFIX = partida_
 

@@ -43,7 +43,19 @@ QGames - Perl extension for QGames engine
 =head1 SYNOPSIS
 
   use QGames;
+
+=head2 GAME TYPE
+
   my $gametype = QGames::open( "Ajedrez" );
+  my $hash_blanco_def = $gametype->describe->{colores}->{blanco};
+  my $logo = $gametype->logo;
+  print "width: " . $logo->{w} . " height: " . $logo->{h} . "\n" ;
+  open PNG ">/tmp/logo.png";
+  print PNG $logo->{png};
+  close PNG;
+
+=head2 GAMES
+
   my $game = $gametype->crea();
 
   foreach my $possible_move( @{$game->posibles} ){

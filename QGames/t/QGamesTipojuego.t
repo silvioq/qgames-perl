@@ -1,5 +1,5 @@
 
-use Test::More tests => 25;
+use Test::More tests => 28;
 BEGIN { use_ok('QGames') };
 
 ok( my $tipojuego = QGames::open( "Ajedrez" ) );
@@ -15,6 +15,12 @@ foreach( qw{ alfil caballo dama peon rey torre } ){
     $i ++;
 }
 ok(  keys( %{$tipojuego->describe->{casilleros}} ) eq  64 ,     "64 casilleros" );
+
+my  $logo = $tipojuego->logo;
+ok( $logo->{w} > 100, "Width" );
+ok( $logo->{h} > 100, "Height" );
+ok( $logo->{png} , "PNG" );
+
 
 ok(  $tipojuego = QGames::open( "AfricaUniversity" ) );
 ok( !$tipojuego->describe->{colores}->{blanco}                 , "No esta el blanco" );
