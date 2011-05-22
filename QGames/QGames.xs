@@ -217,6 +217,15 @@ tjuego_describe(tj)
     OUTPUT:
         RETVAL
 
+const char* 
+tjuego_nombre(tj)
+        QGames_Tipojuego tj
+    CODE:
+        RETVAL = qg_tipojuego_get_nombre( tj );
+    OUTPUT:
+        RETVAL
+
+
 HV*
 tjuego_img(tj, ...)
         QGames_Tipojuego tj

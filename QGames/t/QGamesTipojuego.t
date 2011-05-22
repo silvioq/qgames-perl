@@ -1,5 +1,5 @@
 
-use Test::More tests => 28;
+use Test::More tests => 30;
 BEGIN { use_ok('QGames') };
 
 ok( my $tipojuego = QGames::open( "Ajedrez" ) );
@@ -20,6 +20,10 @@ my  $logo = $tipojuego->logo;
 ok( $logo->{w} > 100, "Width" );
 ok( $logo->{h} > 100, "Height" );
 ok( $logo->{png} , "PNG" );
+
+# Check name
+is( $tipojuego->nombre, "Ajedrez",   "El nombre es ajedrez, que otro!" );
+is( "$tipojuego", "Ajedrez",         "El nombre es ajedrez, que otro!" );
 
 
 ok(  $tipojuego = QGames::open( "AfricaUniversity" ) );

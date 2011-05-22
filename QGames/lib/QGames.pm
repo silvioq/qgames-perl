@@ -31,6 +31,11 @@ require XSLoader;
 XSLoader::load('QGames', $VERSION);
 
 # Preloaded methods go here.
+#
+#
+
+package  QGames::Tipojuego;
+use overload '""' => sub { shift->nombre };
 
 1;
 __END__
