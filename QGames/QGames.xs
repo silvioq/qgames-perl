@@ -4,22 +4,22 @@
 #include  <qgames.h>
 
 #include "ppport.h"
-typedef Tipojuego* QGames_Tipojuego;
-typedef Partida* QGames_Partida;
+typedef Tipojuego* QGames_Gametype;
+typedef Partida* QGames_Game;
 
 #define  hv_store_str( hash, key, str ) hv_store( hash, key, sizeof( key ) - 1, newSVpv( str, strlen( str ) ), 0 )
 
 static HV* generate_hash_movida( Partida* par, Movdata movdat ){
     HV* hashmov = newHV();
     sv_2mortal((SV*)hashmov);
-    hv_store( hashmov, "numero", 6, newSViv( movdat.numero ), 0 );
-    hv_store_str( hashmov, "descripcion", movdat.descripcion );
-    hv_store_str( hashmov, "notacion", movdat.notacion );
-    hv_store_str( hashmov, "pieza", movdat.pieza );
-    hv_store_str( hashmov, "color", movdat.color );
+    hv_store( hashmov, "num", 3, newSViv( movdat.numero ), 0 );
+    hv_store_str( hashmov, "d", movdat.descripcion );
+    hv_store_str( hashmov, "n", movdat.notacion );
+    hv_store_str( hashmov, "p", movdat.pieza );
+    hv_store_str( hashmov, "c", movdat.color );
     if( movdat.origen )
-        hv_store_str( hashmov, "origen", movdat.origen );
-    hv_store_str( hashmov, "destino", movdat.destino );
+        hv_store_str( hashmov, "f", movdat.origen );
+    hv_store_str( hashmov, "t", movdat.destino );
 
     if( movdat.captura ){
         AV* arrcap = newAV();
@@ -27,13 +27,13 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
         while(1){
             HV* hashcap = newHV();
             sv_2mortal( (SV*)hashcap );
-            hv_store_str( hashcap, "captura_pieza", movdat.captura_pieza );
-            hv_store_str( hashcap, "captura_casillero", movdat.captura_casillero );
-            hv_store_str( hashcap, "captura_color", movdat.captura_color );
+            hv_store_str( hashcap, "cp", movdat.captura_pieza );
+            hv_store_str( hashcap, "cs", movdat.captura_casillero );
+            hv_store_str( hashcap, "cc", movdat.captura_color );
             av_push( arrcap, newRV((SV*)hashcap) );
             if( !qg_partida_movdata_nextcap( par, &movdat ) ) break;
         }
-        hv_store( hashmov, "captura", 7, newRV( (SV*)arrcap ), 0 );
+        hv_store( hashmov, "cap", 3, newRV( (SV*)arrcap ), 0 );
     }
 
     if( movdat.movida > 1 ){
@@ -43,18 +43,18 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
         while(1){
             HV* hashmmm = newHV();
             sv_2mortal( (SV*)hashmmm );
-            hv_store_str( hashmmm, "movida_pieza", movdat.movida_pieza );
+            hv_store_str( hashmmm, "mp", movdat.movida_pieza );
             if( movdat.movida_origen )
-                hv_store_str( hashmmm, "movida_origen", movdat.movida_origen );
+                hv_store_str( hashmmm, "mf", movdat.movida_origen );
             if( movdat.movida_destino )
-                hv_store_str( hashmmm, "movida_destino", movdat.movida_destino );
+                hv_store_str( hashmmm, "mt", movdat.movida_destino );
             if( movdat.movida_color )
-                hv_store_str( hashmmm, "movida_color", movdat.movida_color );
+                hv_store_str( hashmmm, "mc", movdat.movida_color );
             
             av_push( arrmov, newRV((SV*)hashmmm) );
             if( !qg_partida_movdata_nextmov( par, &movdat ) ) break;
         }
-        hv_store( hashmov, "movida", 6, newRV((SV*)arrmov), 0 );
+        hv_store( hashmov, "move", 4, newRV((SV*)arrmov), 0 );
     }
 
     if( movdat.transforma ){
@@ -63,12 +63,12 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
         while(1){
             HV* hashtra = newHV();
             sv_2mortal( (SV*)hashtra );
-            hv_store_str( hashtra, "transforma_pieza", movdat.transforma_pieza );
-            hv_store_str( hashtra, "transforma_color", movdat.transforma_color );
+            hv_store_str( hashtra, "tp", movdat.transforma_pieza );
+            hv_store_str( hashtra, "tc", movdat.transforma_color );
             av_push( arrtra, newRV((SV*)hashtra) );
             if( !qg_partida_movdata_nexttran( par, &movdat ) ) break;
         }
-        hv_store( hashmov, "transforma", 10, newRV( (SV*)arrtra ), 0 );
+        hv_store( hashmov, "tr", 2, newRV( (SV*)arrtra ), 0 );
     }
 
     if( movdat.crea ){
@@ -77,9 +77,9 @@ static HV* generate_hash_movida( Partida* par, Movdata movdat ){
         while(1){
             HV* hashcre = newHV();
             sv_2mortal( (SV*)hashcre );
-            hv_store_str( hashcre, "crea_pieza", movdat.crea_pieza );
-            hv_store_str( hashcre, "crea_color", movdat.crea_color );
-            hv_store_str( hashcre, "crea_casillero", movdat.crea_casillero );
+            hv_store_str( hashcre, "rp", movdat.crea_pieza );
+            hv_store_str( hashcre, "rc", movdat.crea_color );
+            hv_store_str( hashcre, "rs", movdat.crea_casillero );
             av_push( arrcre, newRV((SV*)hashcre) );
             if( !qg_partida_movdata_nextcrea( par, &movdat ) ) break;
         }
@@ -97,8 +97,8 @@ BOOT:
   {
       HV *stash;
       stash = gv_stashpv("QGames", TRUE);
-      newCONSTSUB(stash, "FINAL_ENJUEGO", newSViv(FINAL_ENJUEGO));
-      newCONSTSUB(stash, "FINAL_EMPATE", newSViv(FINAL_EMPATE));
+      newCONSTSUB(stash, "PLAYING", newSViv(FINAL_ENJUEGO));
+      newCONSTSUB(stash, "DRAW", newSViv(FINAL_EMPATE));
   }
 
 
@@ -118,7 +118,7 @@ get_path()
         RETVAL
 
 
-QGames_Tipojuego
+QGames_Gametype
 open(juego)
         char* juego
     CODE:
@@ -141,20 +141,20 @@ open(juego)
         RETVAL
 
 
-MODULE = QGames		PACKAGE = QGames::Tipojuego  PREFIX = tjuego_
+MODULE = QGames		PACKAGE = QGames::Gametype  PREFIX = tjuego_
 
-QGames_Partida
+QGames_Game
 tjuego_crea(tj,id=NULL)
-        QGames_Tipojuego tj
+        QGames_Gametype tj
         char* id
     CODE:
         RETVAL = qg_tipojuego_create_partida( tj, id );
     OUTPUT:
         RETVAL
 
-QGames_Partida
+QGames_Game
 tjuego_load(tj, bin)
-        QGames_Tipojuego tj
+        QGames_Gametype tj
         SV* bin
     CODE:
         STRLEN len;
@@ -166,7 +166,7 @@ tjuego_load(tj, bin)
 
 HV*
 tjuego_describe(tj)
-        QGames_Tipojuego tj
+        QGames_Gametype tj
     CODE:
         RETVAL = newHV();
         sv_2mortal((SV*)RETVAL);
@@ -176,14 +176,14 @@ tjuego_describe(tj)
             while( color = qg_tipojuego_info_color( tj, i ) ){
                 HV* hashrot = newHV();
                 if( qg_tipojuego_info_color_rotado( tj, i ) ) {
-                    hv_store( hashrot, "rotado", 6, newSViv( 1 ), 0 );
+                    hv_store( hashrot, "rot", 3, newSViv( 1 ), 0 );
                 } else {
-                    hv_store( hashrot, "rotado", 6, newSViv( 0 ), 0 );
+                    hv_store( hashrot, "rot", 3, newSViv( 0 ), 0 );
                 }
                 hv_store( hashcol, color, strlen(color), newRV( (SV*)hashrot ), 0 );
                 i ++;
             }
-            hv_store( RETVAL, "colores", 7, newRV((SV*)hashcol), 0 );
+            hv_store( RETVAL, "c", 1, newRV((SV*)hashcol), 0 );
         }
         {
             AV* arrpie = newAV();
@@ -192,7 +192,7 @@ tjuego_describe(tj)
                 av_push( arrpie, newSVpv( tpieza, strlen( tpieza ) ) );
                 i ++;
             }
-            hv_store( RETVAL, "piezas", 6, newRV((SV*)arrpie), 0 );
+            hv_store( RETVAL, "p", 1, newRV((SV*)arrpie), 0 );
         }
         {
             HV* hashcas = newHV();
@@ -207,19 +207,19 @@ tjuego_describe(tj)
                 hv_store( hashcas, cas, strlen(cas), newRV((SV*)coord), 0 );
                 i ++;
             }
-            hv_store( RETVAL, "casilleros", 10, newRV((SV*)hashcas), 0 );
+            hv_store( RETVAL, "s", 1, newRV((SV*)hashcas), 0 );
             hv_store( RETVAL, "dims", 4, newSViv( dims ), 0 );
         }
         { 
             const char* nombre = qg_tipojuego_get_nombre( tj );
-            hv_store( RETVAL, "nombre", 6, newSVpv( nombre, strlen( nombre ) ), 0 );
+            hv_store( RETVAL, "name", 4, newSVpv( nombre, strlen( nombre ) ), 0 );
         }
     OUTPUT:
         RETVAL
 
 const char* 
-tjuego_nombre(tj)
-        QGames_Tipojuego tj
+tjuego_name(tj)
+        QGames_Gametype tj
     CODE:
         RETVAL = qg_tipojuego_get_nombre( tj );
     OUTPUT:
@@ -228,7 +228,7 @@ tjuego_nombre(tj)
 
 HV*
 tjuego_img(tj, ...)
-        QGames_Tipojuego tj
+        QGames_Gametype tj
     CODE:
         // tablero
         STRLEN  len;
@@ -302,7 +302,7 @@ tjuego_img(tj, ...)
 
 HV*
 tjuego_logo(tj)
-        QGames_Tipojuego tj
+        QGames_Gametype tj
     CODE:
         void*  png; int w, h, size;
         if( size = qg_tipojuego_get_logo( tj, &png, &w, &h ) ){
@@ -322,18 +322,18 @@ tjuego_logo(tj)
 
 
 
-MODULE = QGames		PACKAGE = QGames::Partida  PREFIX = partida_
+MODULE = QGames		PACKAGE = QGames::Game  PREFIX = partida_
 
 void
 partida_DESTROY(par)
-        QGames_Partida par
+        QGames_Game par
     CODE:
         printf( "Destroying partida %s\n", qg_partida_id( par ) );
         qg_partida_free( par );
 
 char*
 partida_id(par)
-        QGames_Partida par
+        QGames_Game par
     CODE:
         RETVAL = qg_partida_id( par );
     OUTPUT:
@@ -341,8 +341,8 @@ partida_id(par)
 
 
 AV*
-partida_posibles(par)
-        QGames_Partida par
+partida_possible(par)
+        QGames_Game par
     CODE:
         int movnum = 0;
         Movdata movdat;
@@ -356,8 +356,8 @@ partida_posibles(par)
         RETVAL
 
 AV*
-partida_historial(par)
-        QGames_Partida par
+partida_history(par)
+        QGames_Game par
     CODE:
         int movnum = 0;
         Movdata movdat;
@@ -372,8 +372,8 @@ partida_historial(par)
 
 
 int
-partida_mover(par, mov)
-        QGames_Partida par
+partida_move(par, mov)
+        QGames_Game par
         SV*  mov
     CODE:
         STRLEN len;
@@ -397,8 +397,8 @@ partida_mover(par, mov)
 
 
 AV*
-partida_tablero(par)
-        QGames_Partida par
+partida_board(par)
+        QGames_Game par
     CODE:
         RETVAL = newAV();
         sv_2mortal((SV*)RETVAL);
@@ -410,9 +410,9 @@ partida_tablero(par)
             qg_partida_tablero_data( par, LAST_MOVE, i, &casillero, &tipo, &color );
             HV* hashpie = newHV();
             sv_2mortal( (SV*)hashpie );
-            hv_store_str( hashpie, "pieza", tipo );
-            hv_store_str( hashpie, "casillero", casillero );
-            hv_store_str( hashpie, "color", color );
+            hv_store_str( hashpie, "p", tipo );
+            hv_store_str( hashpie, "s", casillero );
+            hv_store_str( hashpie, "c", color );
             av_push( RETVAL, newRV((SV*)hashpie) );
         }
         for( i = 0; i < cap; i ++ ){
@@ -420,9 +420,9 @@ partida_tablero(par)
             qg_partida_tablero_datacap( par, LAST_MOVE, i, &tipo, &color );
             HV* hashpie = newHV();
             sv_2mortal( (SV*)hashpie );
-            hv_store_str( hashpie, "pieza", tipo );
-            hv_store_str( hashpie, "casillero", ":captured" );
-            hv_store_str( hashpie, "color", color );
+            hv_store_str( hashpie, "p", tipo );
+            hv_store_str( hashpie, "s", ":captured" );
+            hv_store_str( hashpie, "c", color );
             av_push( RETVAL, newRV((SV*)hashpie) );
         }
     OUTPUT:
@@ -430,7 +430,7 @@ partida_tablero(par)
 
 const char*
 partida_color(par)
-        QGames_Partida par
+        QGames_Game par
     CODE:
         RETVAL = qg_partida_color( par );
     OUTPUT:
@@ -438,34 +438,34 @@ partida_color(par)
 
 
 int
-partida_movidas_count(par)
-        QGames_Partida par
+partida_move_count(par)
+        QGames_Game par
     CODE:
         RETVAL = qg_partida_movhist_count( par );
     OUTPUT:
         RETVAL
 
 char*
-partida_estado(par)
-        QGames_Partida par
+partida_state(par)
+        QGames_Game par
     CODE:
         char* res;
         qg_partida_final( par, &res );
-        RETVAL = res ? res : "Jugando";
+        RETVAL = res ? res : "Playing";
     OUTPUT:
         RETVAL
 
 int 
 partida_final(par)
-        QGames_Partida par
+        QGames_Game par
     CODE:
         RETVAL = qg_partida_final( par, NULL );
     OUTPUT:
         RETVAL
 
 const char*
-partida_ganador(par)
-        QGames_Partida par
+partida_winner(par)
+        QGames_Game par
     CODE:
         int ret = qg_partida_final( par, NULL );
         switch(ret){
@@ -483,7 +483,7 @@ partida_ganador(par)
 
 SV*
 partida_dump(par)
-        QGames_Partida par
+        QGames_Game par
     CODE:
         void* dat; int len;
         if( !qg_partida_dump( par, &dat, &len ) ){

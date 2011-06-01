@@ -25,7 +25,7 @@ our @EXPORT = qw(
 	
 );
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 require XSLoader;
 XSLoader::load('QGames', $VERSION);
@@ -34,8 +34,11 @@ XSLoader::load('QGames', $VERSION);
 #
 #
 
-package  QGames::Tipojuego;
-use overload '""' => sub { shift->nombre };
+package  QGames::Gametype;
+use overload '""' => sub { shift->name };
+
+package  QGames::Game;
+use overload '""' => sub { "#" . shift->id };
 
 1;
 __END__
@@ -63,32 +66,63 @@ QGames - Perl extension for QGames engine
 
   my $game = $gametype->crea();
 
-  foreach my $possible_move( @{$game->posibles} ){
-      print  "Move number: " . $possible_move->{numero} . " Notation: " . $possible_move->{notacion} . "\n";
+=head3 POSSIBLE MOVES
+
+  foreach my $possible_move( @{$game->possible} ){
+      print  "Move number: " . $possible_move->{num} . " Notation: " . $possible_move->{n} . "\n";
   }
 
-  $game->mover( "e4" );
-  foreach my $board( @{$game->tablero} ){
-      print  "Piece: " . $board->{pieza} . "  Square: " . $board->{casillero} . " Owner: " . $board->{color} . "\n";
+Possible moves is a array of hash. Each hash contains
+- num : Number of move
+- d: Description
+- n: Notation
+- p: Piece
+- c: Color
+- f: Square from
+- t: Square to
+- cap : Capture array. Each hash from this array contains
+  - cp: Captured piece
+  - cs: Captured square
+  - cc: Captured color
+- tran: Transformation array. Each hash from this array contains
+  - tp: Transformed piece
+  - tc: Transformed color
+- move: Additional move piece array. Each hash from this array contains
+  - mp: Moved piece
+  - mc: Moved color
+  - mf: Moved from
+  - mt: Moved to
+- crea: Creation piece array. Each hash from this array contains
+  - rp: Created piece
+  - rc: Created color
+  - rs: Created square
+
+=head3 MOVE
+
+  $game->move( "e4" );
+  foreach my $board( @{$game->board} ){
+      print  "Piece: " . $board->{p} . "  Square: " . $board->{s} . " Owner: " . $board->{c} . "\n";
   }
 
   print $game->color; # Prints negro
 
-  # Returns QGames::FINAL_ENJUEGO, QGames::FINAL_EMPATE or color number
+=head3 GAME END
+
+  # Returns QGames::PLAYING, QGames::DRAW or color number
   print $game->final . "\n";
 
   # Returns winner color
-  print $game->ganador . "\n";
+  print $game->winner . "\n";
 
 =head1 DESCRIPTION
 
 This extension wraps QGames Engine functions. Two class are exported:
-QGames::Tipojuego and QGames::Partida
+QGames::Gametype and QGames::Game
 
-QGames::Tipojuego exports functions to create game and describe game
+QGames::Gametype exports functions to create game and describe game
 features.
 
-QGames::Partida is usefull for manage games, exporting possible moves,
+QGames::Game is usefull for manage games, exporting possible moves,
 board status, history moves and move actions.
 
 =head2 EXPORT

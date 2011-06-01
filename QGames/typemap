@@ -1,6 +1,6 @@
 TYPEMAP
-QGames_Tipojuego  T_PTROBJ_SPEC
-QGames_Partida  T_PTROBJ_SPEC
+QGames_Gametype  T_PTROBJ_SPEC
+QGames_Game  T_PTROBJ_SPEC
 
 INPUT
 T_PTROBJ_SPEC

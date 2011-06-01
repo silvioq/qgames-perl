@@ -14,6 +14,6 @@ BEGIN { use_ok('QGames') };
 # its man page ( perldoc Test::More ) for help writing this test script.
 
 
-is( QGames::FINAL_ENJUEGO, -1 );
-is( QGames::FINAL_EMPATE, 0 );
+is( QGames::PLAYING, -1 );
+is( QGames::DRAW, 0 );
 
