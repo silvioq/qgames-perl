@@ -381,15 +381,15 @@ partida_move(par, mov)
         if( SvIOK( mov )) {
             RETVAL = qg_partida_mover( par, SvIV( mov ) );
             if( !RETVAL )
-                croak( "Error movimiento incorrecto %d", SvIV(mov) );
+                croak( "Incorrect move %d", SvIV(mov) );
         } else {
             ptrmov = SvPV( mov, len );
             if( ptrmov ){
                 RETVAL = qg_partida_mover_notacion( par, ptrmov );
                 if( !RETVAL )
-                    croak( "Error movimiento incorrecto %s", ptrmov );
+                    croak( "Incorrect move %s", ptrmov );
             } else {
-                croak( "Error movimiento incorrecto" );
+                croak( "Incorrect move" );
             }
         }
     OUTPUT:
